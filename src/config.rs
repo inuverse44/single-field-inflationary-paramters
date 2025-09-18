@@ -3,7 +3,6 @@ use std::collections::HashMap;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub output_file: String, 
     pub simulations: Vec<Simulation>, 
 }
 
@@ -11,6 +10,7 @@ pub struct Config {
 pub struct Simulation {
     pub name: String, 
     pub model: String, 
+    pub output_file: String,
     pub scan_parameter: Scan, 
     pub fixed_parameters: HashMap<String, f64>, 
 }

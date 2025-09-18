@@ -9,7 +9,7 @@ pub fn calculate_ns_r(
 ) -> Result<(f64, f64), String> {
     // 1. find_phi_end を呼び出す
     // TODO: この探索範囲は将来的にモデルごとに調整が必要になるかもしれない
-    let phi_end_search_range = (20.0, 1.0);
+    let phi_end_search_range = (0.0, 20.0);
     let phi_end = find_phi_end(potential, phi_end_search_range, precision)
         .map_err(|e| format!("Could not find phi_end: {}", e))?;
 

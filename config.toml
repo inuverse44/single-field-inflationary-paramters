@@ -1,13 +1,13 @@
-output_file = "output/ns_r_diagram.csv"
-
 [[simulations]]
 name = "Chaotic (p-scan)"
 model = "Chaotic"
 scan_parameter = { name = "power", start = 1.0, end = 4.0, steps = 50}
 fixed_parameters = { v0 = 0.01 }
+output_file = "output/ns_r_chaotic.csv"
 
 [[simulations]]
-name = "Chaotic (m-scan)"
+name = "Chaotic (p-scan)"
 model = "Chaotic"
-scan_parameter = { name = "v0", start = 0.001, end = 0.1, steps = 50}
-fixed_parameters = { power = 2.0 }
+scan_parameter = { name = "power", start = 0.1, end = 1.0, steps = 20}
+fixed_parameters = { v0 = 0.01 }
+output_file = "output/ns_r_starobinsky.csv"
