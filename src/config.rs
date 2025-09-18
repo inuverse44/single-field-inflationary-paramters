@@ -12,7 +12,7 @@ pub struct Simulation {
     pub name: String, 
     pub model: String, 
     pub scan_parameter: Scan, 
-    pub fixed_parameter: HashMap<String, f64>, 
+    pub fixed_parameters: HashMap<String, f64>, 
 }
 
 #[derive(Deserialize)]
