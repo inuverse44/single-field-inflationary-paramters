@@ -5,14 +5,14 @@ use ns_r::cosmology::{epsilon, eta, spectral_index, tensor_to_scalar_ratio};
 fn main() {
     println!("--- Inflationary Parameters Calculation ---");
 
-    // --- 物理モデルのパラメータ設定 ---
+    // --- ポテンシャル設定 ---
     let potential = ChaoticPotential{ m: 1.0, power: 2.0 };
 
-    // --- 数値計算のパラメータ設定 ---
-    let precision = 1e-6; // 計算精度
-    let n_target = 60.0;    // 計算対象のe-fold数
+    // --- パラメータ設定 ---
+    let precision = 1e-6; 
+    let n_target = 60.0;
 
-    // find_phi_end を呼び出し、インフレーションの終点を探す
+    // find_phi_end を呼び出し、phi_endを求める
     let phi_end_search_range = (20.0, 1.0);
     let phi_end = match find_phi_end(&potential, phi_end_search_range, precision) {
         Ok(phi) => {
@@ -25,7 +25,7 @@ fn main() {
         }
     };
 
-    // find_phi_exit を呼び出し、e-fold=60となる点を逆算する
+    // find_phi_exit を呼び出し、e-fold=60となるphiを求める
     let phi_exit_search_range = (phi_end + 0.1, 30.0); 
     let phi_exit = match find_phi_exit(&potential, phi_end, n_target, phi_exit_search_range, precision) {
         Ok(phi_exit_val) => {
@@ -38,12 +38,13 @@ fn main() {
         }
     };
 
-    // スローロールパラメータと、そこから導出される物理量を計算
+    // スローロールパラメータ
     let e = epsilon(&potential, phi_exit);
     let h = eta(&potential, phi_exit);
     println!("epsilon = {}", e);
     println!("eta = {}", h);
 
+    // spectral index and tensor-to-scalar ratio
     let ns = spectral_index(e, h);
     let r = tensor_to_scalar_ratio(e);
     println!("spectral index = {}", ns);

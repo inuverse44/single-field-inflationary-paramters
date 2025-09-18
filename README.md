@@ -29,7 +29,8 @@
 | Python                | x.x.x     |
 
 
-<img src="https://img.shields.io/badge/Rust-1.89.0-dea584?style=flat-square&logo=rust&logoColor=white" alt="Rust 1.89.0"> 
+<img src="https://img.shields.io/badge/Rust-1.89.0-dea584?style=flat-square&logo=rust&logoColor=white" alt="Rust 1.89.0">   
+
 <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
 
 
