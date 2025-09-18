@@ -1,0 +1,13 @@
+output_file = "output/ns_r_diagram.csv"
+
+[[simulations]]
+name = "Chaotic (p-scan)"
+model = "Chaotic"
+scan_parameter = { name = "power", start = 1.0, end = 4.0, steps = 50}
+fixed_parameter = { m = 0.01 }
+
+[[simulations]]
+name = "Chaotic (m-scan)"
+model = "Chaotic"
+scan_parameter = { name = "m", start = 0.001, end = 0.1, steps = 50}
+fixed_parameter = { power = 2.0 }
