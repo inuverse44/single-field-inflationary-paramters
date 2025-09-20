@@ -101,6 +101,8 @@ if __name__ == '__main__':
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
+    # Suppress excessive logging from libraries, especially matplotlib
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)
     # ------------------------
 
     logger.info("Starting ns-r diagram creation process.")

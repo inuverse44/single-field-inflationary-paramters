@@ -1,8 +1,6 @@
 use std::fs::{self, File};
 use std::io::{Write};
 use std::path::Path;
-
-// ns_rクレート（lib.rsで公開されたモジュール）の各要素をインポート
 use ns_r::{
     config::Config,
     models::create_potential,
