@@ -8,15 +8,15 @@ use crate::potential::Potential;
 use crate::constants::M_P;
 
 pub fn hubble_parameter(potential: &impl Potential, phi: f64, dot_phi: f64) -> f64 {
-        ((0.5 * dot_phi.powi(2) + potential.value(phi)) / (3.0 * M_P)).sqrt()
+        ((0.5 * dot_phi.powi(2) + potential.v(phi)) / (3.0 * M_P)).sqrt()
 }
 
-pub fn epsilon(potential: &impl Potential, phi: f64) -> f64 {
-    0.5 * M_P.powi(2) * (potential.prime(phi) / potential.value(phi)).powi(2)
+pub fn epsilon(potential: &(impl Potential + ?Sized), phi: f64) -> f64 {
+    0.5 * M_P.powi(2) * (potential.p(phi) / potential.v(phi)).powi(2)
 }
 
-pub fn eta(potential: &impl Potential, phi: f64) -> f64 {
-    M_P.powi(2) * potential.double_prime(phi) / potential.value(phi)
+pub fn eta(potential: &(impl Potential + ?Sized), phi: f64) -> f64 {
+    M_P.powi(2) * potential.p2(phi) / potential.v(phi)
 }
 
 pub fn spectral_index(epsilon: f64, eta: f64) -> f64 {
@@ -33,14 +33,18 @@ mod tests {
     use super::*; // 親モジュール（cosmology）のアイテムをすべてインポート
     use crate::potential::{ChaoticPotential};
 
+    fn setup_potential() -> ChaoticPotential {
+        ChaoticPotential { v0: 1.0, power: 2.0 }
+    }
+
     #[test]
     fn test_hubble_parameter() {
         // ----- Arrange -----
-        let potential = ChaoticPotential { m: 1.0, power: 2.0 };
+        let potential = setup_potential();
         let phi = 10.0;
         let dot_phi: f64 = 1.0;
         let precision = 1e-9;
-        let expected_h = ((0.5 * dot_phi.powi(2) + potential.value(phi)) / (3.0 * M_P)).sqrt();
+        let expected_h = ((0.5 * dot_phi.powi(2) + potential.v(phi)) / (3.0 * M_P)).sqrt();
 
         // ----- Act -----
         let actual_h = hubble_parameter(&potential, phi, dot_phi);
@@ -52,10 +56,10 @@ mod tests {
     #[test]
     fn test_epsilon() {
         // ----- Arrange -----
-        let potential = ChaoticPotential { m: 1.0, power: 2.0 };
+        let potential = setup_potential();
         let phi = 10.0;
         let precision = 1e-9;
-        let expected_epsilon = 0.5 * M_P.powi(2) * (potential.prime(phi) / potential.value(phi)).powi(2);
+        let expected_epsilon = 0.5 * M_P.powi(2) * (potential.p(phi) / potential.v(phi)).powi(2);
 
         // ----- Act -----
         let actual_epsilon = epsilon(&potential, phi);
@@ -67,10 +71,10 @@ mod tests {
     #[test]
     fn test_eta() {
         // ----- Arrange -----
-        let potential = ChaoticPotential { m: 1.0, power: 2.0 };
+        let potential = setup_potential();
         let phi = 10.0;
         let precision = 1e-9;
-        let expected_eta = M_P.powi(2) * potential.double_prime(phi) / potential.value(phi);
+        let expected_eta = M_P.powi(2) * potential.p2(phi) / potential.v(phi);
 
         // ----- Act -----
         let actual_eta = eta(&potential, phi);

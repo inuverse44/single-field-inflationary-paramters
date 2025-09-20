@@ -3,7 +3,7 @@ use crate::cosmology::{epsilon};
 
 
 // ε(φ) = 1 となる φ_endを見つける
-pub fn find_phi_end(potential: &impl Potential, search_range: (f64, f64), precision: f64) -> Result<f64, &'static str> {
+pub fn find_phi_end(potential: &(impl Potential + ?Sized), search_range: (f64, f64), precision: f64) -> Result<f64, &'static str> {
 
     // 根が存在するかチェック
     let f = epsilon(potential, search_range.0) - 1.0;
@@ -34,7 +34,7 @@ pub fn find_phi_end(potential: &impl Potential, search_range: (f64, f64), precis
 // e-foldの積分計算を行う
 /// e-foldの積分計算を行い、対応するφの値を返す
 pub fn find_phi_exit(
-    potential: &impl Potential, 
+    potential: &(impl Potential + ?Sized), 
     phi_end: f64, 
     n_target: f64, // e-foldの目標値
     search_range: (f64, f64),
@@ -42,7 +42,7 @@ pub fn find_phi_exit(
 ) -> Result<f64, &'static str> {
 
     //　クロージャが使える
-    let integrand = |phi: f64| potential.value(phi) / potential.prime(phi);
+    let integrand = |phi: f64| potential.v(phi) / potential.p(phi);
     let efold_num = |phi: f64| simpson(|p| integrand(p), phi_end, phi, precision);
     let find_root = |phi: f64| efold_num(phi) - n_target;
 

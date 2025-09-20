@@ -1,0 +1,11 @@
+/target
+
+# MacOS
+.DS_Store
+
+# output
+**/*.csv
+**/*.png
+
+# virtual environment
+/venv
