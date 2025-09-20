@@ -5,3 +5,7 @@
 
 # output
 **/*.csv
+**/*.png
+
+# virtual environment
+/venv
