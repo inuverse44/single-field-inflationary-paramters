@@ -35,24 +35,31 @@
 
 
 ## ディレクトリ構成
-> tree -I target
+>  tree -I "target|venv|doc"
 ```
 .
 ├── Cargo.lock
 ├── Cargo.toml
-├── doc
-│   ├── MEMO.md
-│   ├── SPEC.md
-│   └── TEST.md
+├── config.toml
 ├── GEMINI.md
+├── observation                         # 観測データ
+│   ├── Planck_BK18_ns_r_1sigma.txt 
+│   └── Planck_BK18_ns_r_2sigma.txt
+├── output                              # 生成されるデータの出力先
 ├── README.md
-└── src
-    ├── constants.rs
-    ├── cosmology.rs
-    ├── lib.rs
-    ├── main.rs
-    ├── potential.rs
-    └── solver.rs
+├── requirements.txt
+├── src
+│   ├── calculation.rs                  # ns-r計算
+│   ├── config.rs                       # config.tomlから構造体作成する
+│   ├── constants.rs                    # 物理・数学定数
+│   ├── cosmology.rs                    # 宇宙論的パラメタ(ε, η, H)
+│   ├── lib.rs                             
+│   ├── main.rs
+│   ├── models.rs
+│   ├── potential.rs                    # インフレーションのポテンシャル
+│   └── solver.rs
+└── visualization
+    └── visualize.py
 ```
 
 ## 始め方
@@ -71,9 +78,45 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 詳しくは[公式ページ](https://www.rust-lang.org/ja/tools/install)を参照してください。
 
+### Pythonの仮想環境の立ち上げ
+
+仮想環境を作成します。
+```python
+python3 -m venv venv
+```
+
+仮想環境を起動します。
+```bash
+source venv/bin/activate
+```
+
+必要なライブラリをインストールします。
+```python
+pip install -r requirements.txt
+```
+
+これで必要なセットアップは完了です。
+
+## プロジェクト構造の概要
+### DFD
+ルートパスから見た時のプロジェクトのディクトリ同士のDFDは下記の通りです。
+
+```mermaid
+flowchart LR
+OBS[observation/]
+VSLZ[visualization/<br>Python project]
+OTPT[output/]
+SRC[src/<br>Rust project]
+
+SRC -- ns-r prediction (csv) --> OTPT;
+VSLZ -- ns-r diagram (png) --> OTPT;
+OTPT -- ns-r prediction (csv) --> VSLZ;
+OBS -- Planck/BK data (txt) --> VSLZ;
+```
+
 
 ## モジュールの依存関係
-矢印は参照するモジュールを表している。
+矢印は参照するモジュールを表しています。
 
 ```mermaid
 flowchart
