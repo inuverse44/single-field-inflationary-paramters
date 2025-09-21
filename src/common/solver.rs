@@ -1,4 +1,4 @@
-use crate::potential::Potential;
+use crate::models::Potential;
 use crate::cosmology::{epsilon};
 
 
@@ -38,12 +38,13 @@ pub fn find_phi_exit(
     phi_end: f64, 
     n_target: f64, // e-foldの目標値
     search_range: (f64, f64),
-    precision: f64
+    precision: f64,
+    max_iter: usize,
 ) -> Result<f64, &'static str> {
 
     //　クロージャが使える
     let integrand = |phi: f64| potential.v(phi) / potential.p(phi);
-    let efold_num = |phi: f64| simpson(|p| integrand(p), phi_end, phi, precision);
+    let efold_num = |phi: f64| simpson(|p| integrand(p), phi_end, phi, precision, max_iter);
     let find_root = |phi: f64| efold_num(phi) - n_target;
 
     let mut phi_a = search_range.0;
@@ -75,13 +76,13 @@ pub fn find_phi_exit(
 }
 
 // TODO: 前ステップの分割したときの値を使いきれていない。まだ最適化できる。
-pub fn simpson<F>(f: F, a: f64, b: f64, precision: f64) -> f64 
+pub fn simpson<F>(f: F, a: f64, b: f64, precision: f64, max_iter: usize) -> f64 
     where F: Fn(f64) -> f64 {
 
     let mut n = 2; // 初期分割数
     let mut last_result = simpson_internal(&f, a, b, n);
 
-    for _ in 0..20 { // 念のため最大20回程度の反復に制限
+    for _ in 0..max_iter { // 念のため最大20回程度の反復に制限
         n *= 2; // 分割数を2倍にする
         let current_result = simpson_internal(&f, a, b, n);
 
@@ -122,13 +123,13 @@ fn simpson_internal<F>(f: &F, a: f64, b: f64, n: usize) -> f64
 #[cfg(test)]
 mod tests {
     use super::*; // 親モジュール（solver）のアイテムをすべてインポート
-    use crate::potential::{ChaoticPotential};
+    use crate::models::chaotic::potential::ChaoticPotential;
 
     #[test]
     fn test_find_phi_end_chaotic_potential_success() {
         // ----- Arrange -----
         // テスト対象のポテンシャルと計算精度を設定
-        let potential = ChaoticPotential { m: 1.0, power: 2.0 };
+        let potential = ChaoticPotential { v0: 1.0, power: 2.0 };
         let precision = 1.0e-6;
         let expected_phi_end = 2.0_f64.sqrt();
         // 解を十分に挟む探索範囲を設定
@@ -152,7 +153,7 @@ mod tests {
     #[test]
     fn test_find_phi_exit_chaotic_potential_success() {
         // ----- Arange ----- 
-        let potential = ChaoticPotential { m: 1.0, power: 2.0 };
+        let potential = ChaoticPotential { v0: 1.0, power: 2.0 };
         let precision = 1.0e-6;
         let expected_efolds = 60.0;
         let power = 2.0;
@@ -160,7 +161,7 @@ mod tests {
         let expected_phi_exit = (2.0 * power * expected_efolds + phi_end ).sqrt(); // これは解析的に導かれる
 
         // ----- Act ----- 
-        let result = find_phi_exit(&potential, phi_end, expected_efolds, (1.0, 30.0), precision);
+        let result = find_phi_exit(&potential, phi_end, expected_efolds, (1.0, 30.0), precision, 20);
         let actual_phi_exit = result.unwrap();
 
         // ----- Assert -----
@@ -181,13 +182,10 @@ mod tests {
         let expected_answer = 1.0 - 1.0_f64.cos();
 
         // ----- Act -----
-        let actual_answer = simpson(f, a, b, precision);
+        let actual_answer = simpson(f, a, b, precision, 20);
 
         // ----- Assert -----
         assert!((actual_answer - expected_answer).abs() < 1.0e-7);
     }
         
 }
-
-
-

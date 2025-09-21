@@ -4,7 +4,7 @@
  * パスの記述が壊れにくい
  * ベストプラクティス
  */
-use crate::potential::Potential;
+use crate::models::Potential;
 use crate::constants::M_P;
 
 pub fn hubble_parameter(potential: &impl Potential, phi: f64, dot_phi: f64) -> f64 {

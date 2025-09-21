@@ -3,8 +3,7 @@ use std::io::{Write};
 use std::path::Path;
 use ns_r::{
     config::Config,
-    models::create_potential,
-    calculation::calculate_ns_r,
+    models::{create_potential, chaotic, natural},
 };
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -44,13 +43,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Ok(p) => p,
                 Err(e) => {
                     println!("Error creating potential: {}", e);
-                    continue; // 次のパラメータへ
+                    continue; // to next parameter
                 }
             };
 
             let n_target = 60.0;
-            let precision = 1e-6;
-            match calculate_ns_r(potential.as_ref(), n_target, precision) {
+            let precision = sim.solver_precision;
+            let simpson_max_iter = sim.simpson_max_iter;
+
+            let result = match sim.model.as_str() {
+                "Chaotic" => chaotic::calculate(potential.as_ref(), n_target, precision, simpson_max_iter),
+                "Natural" => natural::calculate(potential.as_ref(), param_value, n_target, precision, simpson_max_iter),
+                _ => Err(format!("Unknown model calculation strategy: {}", sim.model)),
+            };
+
+            match result {
                 Ok((ns, r)) => {
                     writeln!(file, "{},{},{},{},{}", sim.name, scan.name, param_value, ns, r)?;
                     println!("OK -> (ns, r) = ({:.4}, {:.4e})", ns, r);

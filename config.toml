@@ -2,12 +2,16 @@
 name = "Chaotic (p-scan)"
 model = "Chaotic"
 scan_parameter = { name = "power", start = 1.0, end = 4.0, steps = 50}
-fixed_parameters = { v0 = 0.01 }
+fixed_parameters = { v0 = 1 }
 output_file = "output/ns_r_chaotic.csv"
+solver_precision = 1e-6
+simpson_max_iter = 30
 
 [[simulations]]
-name = "Chaotic (p-scan)"
-model = "Chaotic"
-scan_parameter = { name = "power", start = 0.1, end = 1.0, steps = 20}
-fixed_parameters = { v0 = 0.01 }
-output_file = "output/ns_r_starobinsky.csv"
+name = "Natural (f-scan)"
+model = "Natural"
+scan_parameter = { name = "f", start = 1, end = 7.0, steps = 50}
+fixed_parameters = { v0 = 1 }
+output_file = "output/ns_r_natral.csv"
+solver_precision = 1e-6
+simpson_max_iter = 30
