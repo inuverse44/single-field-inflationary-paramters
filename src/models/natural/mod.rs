@@ -27,6 +27,7 @@ pub fn calculate(
 
     // Also set the exit search range dynamically
     let phi_exit_search_range = (phi_end+0.00001, PI * f); // Add a buffer
+    println!("phi_exit_search_range: ({}, {})", phi_exit_search_range.0, phi_exit_search_range.1);
     let phi_exit = find_phi_exit(potential, phi_end, n_target, phi_exit_search_range, precision, simpson_max_iter)
         .map_err(|e| format!("Could not find phi_exit: {}", e))?;
 

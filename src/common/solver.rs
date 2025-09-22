@@ -51,7 +51,7 @@ pub fn find_phi_exit(
 
     // 根が存在するかチェック
     let fa = find_root(phi_a);
-    let fb = find_root(phi_b);
+    let fb = find_root(phi_b); // <-- natural inflation はここで死んでいる
     if fa * fb >= 0.0 {
         println!("fa: {}, fb: {}, fa * fb: {}",fa, fb,  fa * fb);
         return Err("Root for phi_exit not in search range. Change the range.");
