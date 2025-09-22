@@ -10,7 +10,7 @@ simpson_max_iter = 30
 [[simulations]]
 name = "Natural (f-scan)"
 model = "Natural"
-scan_parameter = { name = "f", start = 1, end = 7.0, steps = 50}
+scan_parameter = { name = "f", start = 20.0, end = 30.0, steps = 50}
 fixed_parameters = { v0 = 1 }
 output_file = "output/ns_r_natral.csv"
 solver_precision = 1e-6

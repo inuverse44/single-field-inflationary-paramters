@@ -16,10 +16,7 @@ pub fn find_phi_end(potential: &(impl Potential + ?Sized), search_range: (f64, f
     let mut phi_b = search_range.1;
     let mut phi_c = (phi_a + phi_b) / 2.0;          // 中心
     let mut fc = epsilon(potential, phi_c) - 1.0;    // その時の関数の値f(c) = ε(φ_c) - 1
-    while (phi_b - phi_a).abs() > precision {
-        if fc.abs() < precision {
-            return Ok(phi_c);
-        }
+    while fc.abs() < precision {
         if f * fc < 0.0 {
             phi_b = phi_c;
         } else {
@@ -49,11 +46,14 @@ pub fn find_phi_exit(
 
     let mut phi_a = search_range.0;
     let mut phi_b = search_range.1;
+    println!("serch range: ({}, {}) and its diff: {}", 
+            search_range.0, search_range.1, search_range.1 - search_range.0);
 
     // 根が存在するかチェック
     let fa = find_root(phi_a);
     let fb = find_root(phi_b);
     if fa * fb >= 0.0 {
+        println!("fa: {}, fb: {}, fa * fb: {}",fa, fb,  fa * fb);
         return Err("Root for phi_exit not in search range. Change the range.");
     }
 

@@ -237,3 +237,24 @@ $$
     r = 16 \epsilon
 $$
 
+
+
+
+## ポテンシャル
+### ケイオティックインフレーション (Chaotic inflation)
+
+
+### ナチュラルインフレーション  (Natural inflation)
+
+$$
+\begin{align}
+    V(\phi)
+    &= V_0 \left(
+        1 - \cos \frac{\phi}{f}
+    \right) \,, \\
+    \frac{d V(\phi)}{d \phi}
+    &= \frac{V_0}{f} \sin \frac{\phi}{f} \,, \\
+    \frac{d^2 V(\phi)}{d \phi^2}
+    &= \frac{V_0}{f^2} \cos\frac{\phi}{f}
+\end{align}
+$$
